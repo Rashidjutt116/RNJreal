@@ -1,0 +1,1541 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Math Logic & Set Theory Quiz</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        :root {
+            --primary: #2c3e50;
+            --secondary: #3498db;
+            --success: #27ae60;
+            --danger: #e74c3c;
+            --warning: #f39c12;
+            --light: #ecf0f1;
+            --dark: #2c3e50;
+            --gray: #7f8c8d;
+            --toolbar-bg: #34495e;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #3498db 0%, #2c3e50 100%);
+            color: var(--dark);
+            line-height: 1.6;
+            min-height: 100vh;
+            padding: 20px;
+            overflow-x: hidden;
+        }
+        
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+        
+        header {
+            text-align: center;
+            margin-bottom: 30px;
+            color: white;
+            text-shadow: 0 2px 5px rgba(0,0,0,0.2);
+        }
+        
+        .name-animation {
+            font-size: 3.5rem;
+            margin-bottom: 10px;
+            height: 80px;
+            overflow: hidden;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .animated-name {
+            display: inline-block;
+        }
+        
+        .name-char {
+            display: inline-block;
+            animation: charColorChange 3s infinite;
+        }
+        
+        @keyframes charColorChange {
+            0% { color: #ff6b6b; transform: translateY(0); }
+            25% { color: #4ecdc4; transform: translateY(-5px); }
+            50% { color: #45b7d1; transform: translateY(0); }
+            75% { color: #96ceb4; transform: translateY(5px); }
+            100% { color: #ff6b6b; transform: translateY(0); }
+        }
+        
+        .fullscreen-btn {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: rgba(255,255,255,0.2);
+            border: none;
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            color: white;
+            font-size: 1.2rem;
+            cursor: pointer;
+            z-index: 1000;
+            transition: all 0.3s;
+        }
+        
+        .fullscreen-btn:hover {
+            background: rgba(255,255,255,0.3);
+            transform: scale(1.1);
+        }
+        
+        .subtitle {
+            font-size: 1.2rem;
+            opacity: 0.9;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+        
+        .nav-tabs {
+            display: flex;
+            background: white;
+            border-radius: 10px;
+            padding: 10px;
+            margin-bottom: 20px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            flex-wrap: wrap;
+        }
+        
+        .nav-tab {
+            padding: 12px 20px;
+            background: none;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin: 5px;
+        }
+        
+        .nav-tab.active {
+            background: var(--primary);
+            color: white;
+        }
+        
+        .tab-content {
+            display: none;
+        }
+        
+        .tab-content.active {
+            display: block;
+        }
+        
+        .card {
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            padding: 30px;
+            margin-bottom: 25px;
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+        
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.15);
+        }
+        
+        .card-title {
+            font-size: 1.5rem;
+            color: var(--primary);
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid var(--light);
+        }
+        
+        .topic-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+        
+        .topic-card {
+            background: white;
+            border-radius: 12px;
+            padding: 25px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+            border: 2px solid transparent;
+        }
+        
+        .topic-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+            border-color: var(--primary);
+        }
+        
+        .topic-card.selected {
+            border-color: var(--primary);
+            background: rgba(44, 62, 80, 0.05);
+        }
+        
+        .topic-icon {
+            font-size: 2.5rem;
+            color: var(--primary);
+            margin-bottom: 15px;
+        }
+        
+        .quiz-container {
+            display: none;
+        }
+        
+        .question-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        
+        .question-number {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: var(--primary);
+        }
+        
+        .progress-bar {
+            height: 8px;
+            background-color: #e9ecef;
+            border-radius: 4px;
+            margin: 20px 0;
+            overflow: hidden;
+        }
+        
+        .progress {
+            height: 100%;
+            background-color: var(--primary);
+            width: 0%;
+            transition: width 0.5s ease;
+        }
+        
+        .question-text {
+            font-size: 1.3rem;
+            margin-bottom: 25px;
+            line-height: 1.5;
+            min-height: 80px;
+            padding: 15px;
+            background: #f8f9fa;
+            border-radius: 8px;
+            border-left: 4px solid var(--primary);
+            font-family: 'Cambria Math', serif;
+        }
+        
+        .math-type-container {
+            border: 2px solid #bdc3c7;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            background: white;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        
+        .math-type-toolbar {
+            background: var(--toolbar-bg);
+            padding: 10px;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            border-bottom: 1px solid #bdc3c7;
+        }
+        
+        .math-type-btn {
+            background: white;
+            border: 1px solid #95a5a6;
+            border-radius: 4px;
+            padding: 6px 10px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: all 0.2s;
+        }
+        
+        .math-type-btn:hover {
+            background: var(--secondary);
+            color: white;
+        }
+        
+        .math-type-input {
+            width: 100%;
+            min-height: 120px;
+            padding: 15px;
+            border: none;
+            font-size: 1.2rem;
+            resize: vertical;
+            outline: none;
+            font-family: 'Cambria Math', serif;
+        }
+        
+        .answer-status {
+            padding: 15px;
+            border-radius: 5px;
+            margin: 10px 0;
+            display: none;
+            font-weight: bold;
+            font-size: 1.1rem;
+        }
+        
+        .answer-status.correct {
+            background: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+        
+        .answer-status.incorrect {
+            background: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+        
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 30px;
+        }
+        
+        .btn {
+            padding: 12px 25px;
+            border: none;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .btn-primary {
+            background: var(--primary);
+            color: white;
+        }
+        
+        .btn-primary:hover {
+            background: var(--secondary);
+        }
+        
+        .btn-secondary {
+            background: #7f8c8d;
+            color: white;
+        }
+        
+        .btn-secondary:hover {
+            background: #95a5a6;
+        }
+        
+        .btn-success {
+            background: var(--success);
+            color: white;
+        }
+        
+        .btn-success:hover {
+            background: #2ecc71;
+        }
+        
+        .btn:disabled {
+            background: #bdc3c7;
+            cursor: not-allowed;
+        }
+        
+        .results-container {
+            display: none;
+            text-align: center;
+        }
+        
+        .score-circle {
+            width: 180px;
+            height: 180px;
+            border-radius: 50%;
+            background: white;
+            margin: 0 auto 30px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 3rem;
+            font-weight: bold;
+            color: var(--primary);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            border: 8px solid var(--primary);
+        }
+        
+        .result-details {
+            margin-top: 30px;
+            text-align: left;
+        }
+        
+        .result-item {
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            background: white;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+        }
+        
+        .result-item.correct {
+            border-left: 5px solid var(--success);
+        }
+        
+        .result-item.incorrect {
+            border-left: 5px solid var(--danger);
+        }
+        
+        .definition-panel {
+            margin-top: 30px;
+            background: #f8f9fa;
+            border-radius: 10px;
+            padding: 20px;
+        }
+        
+        .definition-title {
+            font-size: 1.3rem;
+            color: var(--primary);
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .definition-content {
+            line-height: 1.6;
+        }
+        
+        .key {
+            display: inline-block;
+            padding: 3px 8px;
+            background: #e9ecef;
+            border-radius: 4px;
+            font-family: monospace;
+            font-size: 0.9rem;
+            margin: 0 2px;
+        }
+        
+        .formula-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 20px;
+        }
+        
+        .formula-card {
+            background: white;
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+            border-left: 4px solid var(--primary);
+        }
+        
+        .formula-title {
+            font-weight: 600;
+            margin-bottom: 10px;
+            color: var(--primary);
+        }
+        
+        .formula-content {
+            font-family: 'Cambria Math', serif;
+            background: #f8f9fa;
+            padding: 10px;
+            border-radius: 5px;
+            margin-bottom: 10px;
+            font-size: 1.1rem;
+        }
+        
+        .formula-desc {
+            color: var(--gray);
+            font-size: 0.9rem;
+        }
+        
+        .shortcuts-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 15px;
+        }
+        
+        .shortcut-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 12px;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.05);
+        }
+        
+        .symbol {
+            font-weight: 600;
+            color: var(--primary);
+            font-family: 'Cambria Math', serif;
+        }
+        
+        .shortcut {
+            font-family: monospace;
+            background: #e9ecef;
+            padding: 2px 8px;
+            border-radius: 4px;
+        }
+        
+        .quick-quiz {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 20px;
+            margin-top: 20px;
+        }
+        
+        .quick-quiz-item {
+            background: white;
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .quick-quiz-item:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+        }
+        
+        .quiz-question {
+            font-weight: 600;
+            margin-bottom: 15px;
+        }
+        
+        .quiz-options {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+        
+        .quiz-option {
+            padding: 10px;
+            border: 1px solid #bdc3c7;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        
+        .quiz-option:hover {
+            background: #ecf0f1;
+        }
+        
+        .quiz-option.selected {
+            border-color: var(--primary);
+            background: rgba(52, 152, 219, 0.1);
+        }
+        
+        .quiz-option.correct {
+            border-color: var(--success);
+            background: rgba(39, 174, 96, 0.1);
+        }
+        
+        .quiz-option.incorrect {
+            border-color: var(--danger);
+            background: rgba(231, 76, 60, 0.1);
+        }
+        
+        .graph-container {
+            background: white;
+            border-radius: 10px;
+            padding: 20px;
+            margin: 20px 0;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+        }
+        
+        .hint-box {
+            background: #e7f5ff;
+            border-left: 4px solid var(--primary);
+            padding: 15px;
+            margin-bottom: 20px;
+            border-radius: 0 8px 8px 0;
+            display: none;
+        }
+        
+        .hint-title {
+            font-weight: 600;
+            margin-bottom: 8px;
+            color: var(--primary);
+        }
+        
+        @media (max-width: 768px) {
+            .topic-grid, .formula-grid, .shortcuts-grid, .quick-quiz {
+                grid-template-columns: 1fr;
+            }
+            
+            h1 {
+                font-size: 2.2rem;
+            }
+            
+            .name-animation {
+                font-size: 2.5rem;
+                height: 60px;
+            }
+            
+            .card {
+                padding: 20px;
+            }
+            
+            .math-type-toolbar {
+                justify-content: center;
+            }
+            
+            .navigation {
+                flex-direction: column;
+                gap: 15px;
+            }
+            
+            .btn {
+                width: 100%;
+                justify-content: center;
+            }
+            
+            .nav-tabs {
+                flex-direction: column;
+            }
+        }
+        
+        /* Fullscreen styles */
+        body:fullscreen {
+            padding: 40px;
+        }
+        
+        body:-webkit-full-screen {
+            padding: 40px;
+        }
+        
+        body:-moz-full-screen {
+            padding: 40px;
+        }
+        
+        body:-ms-fullscreen {
+            padding: 40px;
+        }
+    </style>
+</head>
+<body>
+    <button class="fullscreen-btn" id="fullscreenBtn">
+        <i class="fas fa-expand"></i>
+    </button>
+
+    <div class="container">
+        <header>
+            <div class="name-animation">
+                <div class="animated-name" id="animatedName"></div>
+            </div>
+            <h1>Math Logic & Set Theory</h1>
+            <p class="subtitle">Interactive Questions & Answers with Math Symbols</p>
+        </header>
+        
+        <div class="nav-tabs">
+            <button class="nav-tab active" data-tab="quiz">
+                <i class="fas fa-question-circle"></i> Math Questions
+            </button>
+            <button class="nav-tab" data-tab="definitions">
+                <i class="fas fa-book"></i> Definitions
+            </button>
+            <button class="nav-tab" data-tab="formulas">
+                <i class="fas fa-square-root-alt"></i> Formulas
+            </button>
+            <button class="nav-tab" data-tab="shortcuts">
+                <i class="fas fa-keyboard"></i> MathType Shortcuts
+            </button>
+        </div>
+        
+        <!-- QUIZ TAB -->
+        <div class="tab-content active" id="quiz-tab">
+            <div class="card" id="topicSelectionCard">
+                <h2 class="card-title">Select a Math Topic</h2>
+                <div class="topic-grid" id="topicGrid">
+                    <div class="topic-card" data-topic="logic">
+                        <div class="topic-icon">
+                            <i class="fas fa-project-diagram"></i>
+                        </div>
+                        <h3 class="topic-name">Logic</h3>
+                        <p class="topic-desc">Propositions, connectives, truth tables</p>
+                    </div>
+                    
+                    <div class="topic-card" data-topic="truth-tables">
+                        <div class="topic-icon">
+                            <i class="fas fa-table"></i>
+                        </div>
+                        <h3 class="topic-name">Truth Tables</h3>
+                        <p class="topic-desc">Tautologies, contradictions, equivalence</p>
+                    </div>
+                    
+                    <div class="topic-card" data-topic="laws">
+                        <div class="topic-icon">
+                            <i class="fas fa-balance-scale"></i>
+                        </div>
+                        <h3 class="topic-name">Laws of Logic</h3>
+                        <p class="topic-desc">DeMorgan's Laws, distributive properties</p>
+                    </div>
+                    
+                    <div class="topic-card" data-topic="set-theory">
+                        <div class="topic-icon">
+                            <i class="fas fa-sitemap"></i>
+                        </div>
+                        <h3 class="topic-name">Set Theory</h3>
+                        <p class="topic-desc">Sets, operations, Venn diagrams</p>
+                    </div>
+                    
+                    <div class="topic-card" data-topic="relations">
+                        <div class="topic-icon">
+                            <i class="fas fa-network-wired"></i>
+                        </div>
+                        <h3 class="topic-name">Relations</h3>
+                        <p class="topic-desc">Reflexive, symmetric, transitive properties</p>
+                    </div>
+                    
+                    <div class="topic-card" data-topic="functions">
+                        <div class="topic-icon">
+                            <i class="fas fa-function"></i>
+                        </div>
+                        <h3 class="topic-name">Functions</h3>
+                        <p class="topic-desc">Injective, surjective, bijective functions</p>
+                    </div>
+                </div>
+                
+                <button class="btn btn-primary" id="startQuizBtn" style="display: none; margin: 0 auto;">
+                    <i class="fas fa-play-circle"></i> Start Questions
+                </button>
+            </div>
+            
+            <div class="card quiz-container" id="quizContainer">
+                <div class="question-header">
+                    <div class="question-number" id="questionNumber">Question 1 of 10</div>
+                    <button class="btn btn-secondary" id="showHintBtn">
+                        <i class="fas fa-lightbulb"></i> Show Hint
+                    </button>
+                </div>
+                
+                <div class="progress-bar">
+                    <div class="progress" id="progressBar"></div>
+                </div>
+                
+                <div class="question-text" id="questionText">
+                    <!-- Question will be inserted here -->
+                </div>
+                
+                <div class="hint-box" id="hintBox">
+                    <div class="hint-title">Hint</div>
+                    <div id="hintText"></div>
+                </div>
+                
+                <div class="math-type-container">
+                    <div class="math-type-toolbar">
+                        <button class="math-type-btn" data-symbol="∧">AND (∧)</button>
+                        <button class="math-type-btn" data-symbol="∨">OR (∨)</button>
+                        <button class="math-type-btn" data-symbol="¬">NOT (¬)</button>
+                        <button class="math-type-btn" data-symbol="→">IMPLIES (→)</button>
+                        <button class="math-type-btn" data-symbol="↔">IFF (↔)</button>
+                        <button class="math-type-btn" data-symbol="∀">FOR ALL (∀)</button>
+                        <button class="math-type-btn" data-symbol="∃">EXISTS (∃)</button>
+                        <button class="math-type-btn" data-symbol="∈">ELEMENT (∈)</button>
+                        <button class="math-type-btn" data-symbol="∉">NOT ELEMENT (∉)</button>
+                        <button class="math-type-btn" data-symbol="⊆">SUBSET (⊆)</button>
+                        <button class="math-type-btn" data-symbol="⊂">PROPER SUBSET (⊂)</button>
+                        <button class="math-type-btn" data-symbol="∪">UNION (∪)</button>
+                        <button class="math-type-btn" data-symbol="∩">INTERSECTION (∩)</button>
+                        <button class="math-type-btn" data-symbol="∅">EMPTY SET (∅)</button>
+                        <button class="math-type-btn" data-symbol="×">PRODUCT (×)</button>
+                        <button class="math-type-btn" data-symbol="√">SQUARE ROOT (√)</button>
+                        <button class="math-type-btn" data-symbol="∑">SUMMATION (∑)</button>
+                        <button class="math-type-btn" data-symbol="∞">INFINITY (∞)</button>
+                        <button class="math-type-btn" data-symbol="∫">INTEGRAL (∫)</button>
+                        <button class="math-type-btn" data-symbol="∂">PARTIAL (∂)</button>
+                        <button class="math-type-btn" data-symbol="α">ALPHA (α)</button>
+                        <button class="math-type-btn" data-symbol="β">BETA (β)</button>
+                        <button class="math-type-btn" data-symbol="γ">GAMMA (γ)</button>
+                        <button class="math-type-btn" data-symbol="π">PI (π)</button>
+                    </div>
+                    <textarea class="math-type-input" id="answerInput" placeholder="Type your answer here... Use toolbar or shortcuts (Ctrl+Shift+O for √, etc.)"></textarea>
+                </div>
+                
+                <div class="answer-status" id="answerStatus"></div>
+                
+                <div class="navigation">
+                    <button class="btn btn-secondary" id="prevBtn" disabled>
+                        <i class="fas fa-arrow-left"></i> Previous
+                    </button>
+                    <button class="btn btn-primary" id="checkBtn">
+                        <i class="fas fa-check"></i> Check Answer
+                    </button>
+                    <button class="btn btn-primary" id="nextBtn">
+                        Next <i class="fas fa-arrow-right"></i>
+                    </button>
+                    <button class="btn btn-success" id="submitBtn" style="display: none;">
+                        <i class="fas fa-paper-plane"></i> Submit All Answers
+                    </button>
+                </div>
+                
+                <div class="definition-panel" id="definitionPanel">
+                    <h3 class="definition-title">
+                        <i class="fas fa-book"></i> Definition
+                    </h3>
+                    <div class="definition-content" id="definitionContent">
+                        <!-- Definition will be inserted here -->
+                    </div>
+                </div>
+            </div>
+            
+            <div class="card results-container" id="resultsContainer">
+                <h2 class="card-title">Results</h2>
+                
+                <div class="score-circle" id="scoreCircle">
+                    0%
+                </div>
+                
+                <h3 id="scoreText">You scored 0 out of 0</h3>
+                <p id="scoreMessage"></p>
+                
+                <div class="result-details" id="resultDetails">
+                    <!-- Result details will be inserted here -->
+                </div>
+                
+                <button class="btn btn-primary" id="restartBtn">
+                    <i class="fas fa-redo"></i> Try Another Topic
+                </button>
+            </div>
+        </div>
+        
+        <!-- DEFINITIONS TAB -->
+        <div class="tab-content" id="definitions-tab">
+            <div class="card">
+                <h2 class="card-title">Mathematical Definitions</h2>
+                
+                <div class="definition-panel">
+                    <h3 class="definition-title">
+                        <i class="fas fa-project-diagram"></i> Logic
+                    </h3>
+                    <div class="definition-content">
+                        <p><strong>Proposition:</strong> A declarative sentence that is either true or false.</p>
+                        <p><strong>Truth Value:</strong> The truth (T) or falsity (F) of a proposition.</p>
+                        <p><strong>Logical Connectives:</strong> Symbols used to combine propositions.</p>
+                    </div>
+                </div>
+                
+                <div class="definition-panel">
+                    <h3 class="definition-title">
+                        <i class="fas fa-sitemap"></i> Set Theory
+                    </h3>
+                    <div class="definition-content">
+                        <p><strong>Set:</strong> A collection of distinct objects.</p>
+                        <p><strong>Subset:</strong> A set A is a subset of B if every element of A is also an element of B.</p>
+                        <p><strong>Union:</strong> The set containing all elements that are in A or in B.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- FORMULAS TAB -->
+        <div class="tab-content" id="formulas-tab">
+            <div class="card">
+                <h2 class="card-title">Mathematical Formulas</h2>
+                
+                <div class="formula-grid">
+                    <div class="formula-card">
+                        <div class="formula-title">Set Union Formula</div>
+                        <div class="formula-content">n(A ∪ B) = n(A) + n(B) - n(A ∩ B)</div>
+                        <div class="formula-desc">Number of elements in union of two sets</div>
+                    </div>
+                    
+                    <div class="formula-card">
+                        <div class="formula-title">De Morgan's Laws</div>
+                        <div class="formula-content">¬(p ∧ q) ≡ ¬p ∨ ¬q<br>¬(p ∨ q) ≡ ¬p ∧ ¬q</div>
+                        <div class="formula-desc">Distributing negation over AND and OR</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- SHORTCUTS TAB -->
+        <div class="tab-content" id="shortcuts-tab">
+            <div class="card">
+                <h2 class="card-title">MathType Keyboard Shortcuts</h2>
+                
+                <div class="shortcuts-grid">
+                    <div class="shortcut-item">
+                        <span class="symbol">√</span>
+                        <span class="shortcut">Ctrl+Shift+O</span>
+                    </div>
+                    <div class="shortcut-item">
+                        <span class="symbol">∑</span>
+                        <span class="shortcut">Ctrl+Shift+S</span>
+                    </div>
+                    <div class="shortcut-item">
+                        <span class="symbol">∫</span>
+                        <span class="shortcut">Ctrl+Shift+I</span>
+                    </div>
+                    <div class="shortcut-item">
+                        <span class="symbol">α</span>
+                        <span class="shortcut">Ctrl+G, A</span>
+                    </div>
+                    <div class="shortcut-item">
+                        <span class="symbol">β</span>
+                        <span class="shortcut">Ctrl+G, B</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // =============================================
+        // MATH QUESTIONS DATA - NUMBERS AND SYMBOLS
+        // =============================================
+        const quizData = {
+            "logic": {
+                title: "Logic",
+                questions: [
+                    {
+                        question: "If p = T and q = F, what is p ∧ q?",
+                        answer: "F",
+                        hint: "AND is only true when both are true",
+                        definition: "Conjunction p ∧ q is true only when both p and q are true",
+                        explanation: "Since p is true and q is false, p ∧ q is false"
+                    },
+                    {
+                        question: "If p = F and q = T, what is p ∨ q?",
+                        answer: "T",
+                        hint: "OR is true when at least one is true",
+                        definition: "Disjunction p ∨ q is false only when both p and q are false",
+                        explanation: "Since q is true, p ∨ q is true"
+                    },
+                    {
+                        question: "If p = T, what is ¬p?",
+                        answer: "F",
+                        hint: "NOT reverses the truth value",
+                        definition: "Negation ¬p has the opposite truth value of p",
+                        explanation: "Since p is true, ¬p is false"
+                    },
+                    {
+                        question: "If p = F and q = F, what is p → q?",
+                        answer: "T",
+                        hint: "Implication is only false when p=T and q=F",
+                        definition: "Conditional p → q is false only when p is true and q is false",
+                        explanation: "Since p is false, p → q is true regardless of q"
+                    },
+                    {
+                        question: "Simplify: (T ∧ F) ∨ T",
+                        answer: "T",
+                        hint: "Evaluate inside parentheses first",
+                        definition: "Follow order of operations: parentheses first",
+                        explanation: "T ∧ F = F, then F ∨ T = T"
+                    }
+                ]
+            },
+            "truth-tables": {
+                title: "Truth Tables",
+                questions: [
+                    {
+                        question: "How many rows in a truth table with 3 variables?",
+                        answer: "8",
+                        hint: "2^n where n is number of variables",
+                        definition: "A truth table with n variables has 2^n rows",
+                        explanation: "2^3 = 8 rows"
+                    },
+                    {
+                        question: "Is p ∨ ¬p a tautology? (Answer T or F)",
+                        answer: "T",
+                        hint: "Check if it's always true",
+                        definition: "A tautology is always true regardless of input values",
+                        explanation: "p ∨ ¬p is always true (Law of Excluded Middle)"
+                    },
+                    {
+                        question: "Is p ∧ ¬p a contradiction? (Answer T or F)",
+                        answer: "T",
+                        hint: "Check if it's always false",
+                        definition: "A contradiction is always false regardless of input values",
+                        explanation: "p ∧ ¬p is always false"
+                    },
+                    {
+                        question: "For p ⊕ q (XOR), when is it true?",
+                        answer: "When exactly one is true",
+                        hint: "Exclusive OR means one or the other but not both",
+                        definition: "p ⊕ q is true when exactly one of p or q is true",
+                        explanation: "XOR is different from regular OR"
+                    }
+                ]
+            },
+            "laws": {
+                title: "Laws of Logic",
+                questions: [
+                    {
+                        question: "What is ¬(p ∧ q) equivalent to?",
+                        answer: "¬p ∨ ¬q",
+                        hint: "This is De Morgan's Law",
+                        definition: "De Morgan's Law: ¬(p ∧ q) ≡ ¬p ∨ ¬q",
+                        explanation: "Negation of AND is OR of negations"
+                    },
+                    {
+                        question: "What is ¬(p ∨ q) equivalent to?",
+                        answer: "¬p ∧ ¬q",
+                        hint: "This is De Morgan's other Law",
+                        definition: "De Morgan's Law: ¬(p ∨ q) ≡ ¬p ∧ ¬q",
+                        explanation: "Negation of OR is AND of negations"
+                    },
+                    {
+                        question: "Simplify: p ∨ (p ∧ q)",
+                        answer: "p",
+                        hint: "This is the absorption law",
+                        definition: "Absorption Law: p ∨ (p ∧ q) ≡ p",
+                        explanation: "p absorbs (p ∧ q) in this case"
+                    },
+                    {
+                        question: "What is p → q equivalent to?",
+                        answer: "¬p ∨ q",
+                        hint: "Implication equivalence",
+                        definition: "p → q ≡ ¬p ∨ q",
+                        explanation: "This is a fundamental logical equivalence"
+                    }
+                ]
+            },
+            "set-theory": {
+                title: "Set Theory",
+                questions: [
+                    {
+                        question: "If A = {1,2,3} and B = {2,3,4}, what is A ∩ B?",
+                        answer: "{2,3}",
+                        hint: "Intersection contains common elements",
+                        definition: "A ∩ B contains elements that are in both A and B",
+                        explanation: "2 and 3 are in both sets"
+                    },
+                    {
+                        question: "If A = {1,2,3} and B = {2,3,4}, what is A ∪ B?",
+                        answer: "{1,2,3,4}",
+                        hint: "Union contains all elements from both sets",
+                        definition: "A ∪ B contains elements that are in A or in B or in both",
+                        explanation: "Combines all distinct elements"
+                    },
+                    {
+                        question: "If |A| = 5 and |B| = 7 and |A ∩ B| = 2, what is |A ∪ B|?",
+                        answer: "10",
+                        hint: "Use inclusion-exclusion principle",
+                        definition: "|A ∪ B| = |A| + |B| - |A ∩ B|",
+                        explanation: "5 + 7 - 2 = 10"
+                    },
+                    {
+                        question: "What is the power set of {a}?",
+                        answer: "{∅, {a}}",
+                        hint: "Power set includes empty set and the set itself",
+                        definition: "Power set contains all subsets",
+                        explanation: "For 1 element, we have 2^1 = 2 subsets"
+                    }
+                ]
+            },
+            "relations": {
+                title: "Relations",
+                questions: [
+                    {
+                        question: "How many ordered pairs in a relation from A to B if |A|=3 and |B|=4?",
+                        answer: "12",
+                        hint: "Cartesian product size",
+                        definition: "|A × B| = |A| × |B|",
+                        explanation: "3 × 4 = 12 possible ordered pairs"
+                    },
+                    {
+                        question: "If R is reflexive on A={1,2,3}, which pairs must be in R?",
+                        answer: "(1,1), (2,2), (3,3)",
+                        hint: "Reflexive means every element relates to itself",
+                        definition: "A relation is reflexive if (a,a) ∈ R for all a ∈ A",
+                        explanation: "All diagonal elements must be present"
+                    }
+                ]
+            },
+            "functions": {
+                title: "Functions",
+                questions: [
+                    {
+                        question: "If f(x) = 2x + 1, what is f(3)?",
+                        answer: "7",
+                        hint: "Substitute x=3 into the function",
+                        definition: "f(3) means evaluate the function at x=3",
+                        explanation: "2(3) + 1 = 6 + 1 = 7"
+                    },
+                    {
+                        question: "If f(x) = x² and g(x) = x + 1, what is (f ∘ g)(2)?",
+                        answer: "9",
+                        hint: "First apply g, then apply f to the result",
+                        definition: "(f ∘ g)(x) = f(g(x))",
+                        explanation: "g(2) = 3, then f(3) = 3² = 9"
+                    }
+                ]
+            }
+        };
+
+        // DOM elements
+        const fullscreenBtn = document.getElementById('fullscreenBtn');
+        const animatedName = document.getElementById('animatedName');
+        const topicSelectionCard = document.getElementById('topicSelectionCard');
+        const topicGrid = document.getElementById('topicGrid');
+        const startQuizBtn = document.getElementById('startQuizBtn');
+        const quizContainer = document.getElementById('quizContainer');
+        const questionNumber = document.getElementById('questionNumber');
+        const questionText = document.getElementById('questionText');
+        const progressBar = document.getElementById('progressBar');
+        const hintBox = document.getElementById('hintBox');
+        const hintText = document.getElementById('hintText');
+        const showHintBtn = document.getElementById('showHintBtn');
+        const answerInput = document.getElementById('answerInput');
+        const answerStatus = document.getElementById('answerStatus');
+        const prevBtn = document.getElementById('prevBtn');
+        const checkBtn = document.getElementById('checkBtn');
+        const nextBtn = document.getElementById('nextBtn');
+        const submitBtn = document.getElementById('submitBtn');
+        const definitionPanel = document.getElementById('definitionPanel');
+        const definitionContent = document.getElementById('definitionContent');
+        const resultsContainer = document.getElementById('resultsContainer');
+        const scoreCircle = document.getElementById('scoreCircle');
+        const scoreText = document.getElementById('scoreText');
+        const scoreMessage = document.getElementById('scoreMessage');
+        const resultDetails = document.getElementById('resultDetails');
+        const restartBtn = document.getElementById('restartBtn');
+        const mathTypeBtns = document.querySelectorAll('.math-type-btn');
+        const navTabs = document.querySelectorAll('.nav-tab');
+        const tabContents = document.querySelectorAll('.tab-content');
+
+        // Quiz state
+        let currentTopic = '';
+        let currentQuestions = [];
+        let currentQuestionIndex = 0;
+        let userAnswers = [];
+        let userCorrectness = [];
+        let quizCompleted = false;
+
+        // Initialize the application
+        function init() {
+            console.log("Initializing math quiz application...");
+            
+            // Initialize name animation
+            initNameAnimation();
+            
+            // Fullscreen button
+            fullscreenBtn.addEventListener('click', toggleFullscreen);
+            
+            // Set up tab navigation
+            navTabs.forEach(tab => {
+                tab.addEventListener('click', () => {
+                    const tabId = tab.getAttribute('data-tab');
+                    switchTab(tabId);
+                });
+            });
+            
+            // Add event listeners to topic cards
+            const topicCards = document.querySelectorAll('.topic-card');
+            topicCards.forEach(card => {
+                card.addEventListener('click', () => {
+                    console.log("Topic card clicked:", card.getAttribute('data-topic'));
+                    
+                    // Remove selected class from all cards
+                    topicCards.forEach(c => c.classList.remove('selected'));
+                    // Add selected class to clicked card
+                    card.classList.add('selected');
+                    
+                    // Set current topic and show start button
+                    currentTopic = card.getAttribute('data-topic');
+                    startQuizBtn.style.display = 'block';
+                });
+            });
+            
+            // Start quiz button
+            startQuizBtn.addEventListener('click', startQuiz);
+            
+            // Math toolbar buttons
+            mathTypeBtns.forEach(btn => {
+                btn.addEventListener('click', () => {
+                    const symbol = btn.getAttribute('data-symbol');
+                    insertAtCursor(answerInput, symbol);
+                });
+            });
+            
+            // Navigation buttons
+            prevBtn.addEventListener('click', goToPreviousQuestion);
+            checkBtn.addEventListener('click', checkAnswer);
+            nextBtn.addEventListener('click', goToNextQuestion);
+            submitBtn.addEventListener('click', showResults);
+            
+            // Hint button
+            showHintBtn.addEventListener('click', toggleHint);
+            
+            // Restart button
+            restartBtn.addEventListener('click', restartQuiz);
+            
+            // Keyboard shortcuts
+            document.addEventListener('keydown', handleKeyboardShortcuts);
+            
+            console.log("Math quiz application initialized successfully");
+        }
+
+        // Initialize name animation
+        function initNameAnimation() {
+            const names = ["Rashid", "Noor", "Waseem"];
+            let currentNameIndex = 0;
+            let currentCharIndex = 0;
+            let currentName = "";
+            let isDeleting = false;
+            
+            function typeName() {
+                const current = names[currentNameIndex];
+                
+                if (isDeleting) {
+                    currentName = current.substring(0, currentName.length - 1);
+                    currentCharIndex--;
+                } else {
+                    currentName = current.substring(0, currentName.length + 1);
+                    currentCharIndex++;
+                }
+                
+                // Display name with animated characters
+                animatedName.innerHTML = '';
+                for (let i = 0; i < currentName.length; i++) {
+                    const charSpan = document.createElement('span');
+                    charSpan.className = 'name-char';
+                    charSpan.textContent = currentName[i];
+                    charSpan.style.animationDelay = `${i * 0.1}s`;
+                    animatedName.appendChild(charSpan);
+                }
+                
+                if (!isDeleting && currentName === current) {
+                    // Finished typing, wait then start deleting
+                    setTimeout(() => {
+                        isDeleting = true;
+                        typeName();
+                    }, 2000);
+                } else if (isDeleting && currentName === '') {
+                    // Finished deleting, move to next name
+                    isDeleting = false;
+                    currentNameIndex = (currentNameIndex + 1) % names.length;
+                    setTimeout(typeName, 500);
+                } else {
+                    // Continue typing or deleting
+                    setTimeout(typeName, isDeleting ? 100 : 200);
+                }
+            }
+            
+            // Start the animation
+            typeName();
+        }
+
+        // Toggle fullscreen
+        function toggleFullscreen() {
+            if (!document.fullscreenElement) {
+                document.documentElement.requestFullscreen().catch(err => {
+                    console.log(`Error attempting to enable fullscreen: ${err.message}`);
+                });
+                fullscreenBtn.innerHTML = '<i class="fas fa-compress"></i>';
+            } else {
+                if (document.exitFullscreen) {
+                    document.exitFullscreen();
+                    fullscreenBtn.innerHTML = '<i class="fas fa-expand"></i>';
+                }
+            }
+        }
+
+        // Switch between tabs
+        function switchTab(tabId) {
+            // Update active tab
+            navTabs.forEach(tab => {
+                tab.classList.toggle('active', tab.getAttribute('data-tab') === tabId);
+            });
+            
+            // Show active tab content
+            tabContents.forEach(content => {
+                content.classList.toggle('active', content.id === `${tabId}-tab`);
+            });
+            
+            // If switching to quiz tab and we have a selected topic, show start button
+            if (tabId === 'quiz' && currentTopic) {
+                startQuizBtn.style.display = 'block';
+            }
+        }
+
+        // Start the quiz
+        function startQuiz() {
+            console.log("Starting quiz for topic:", currentTopic);
+            
+            if (!currentTopic) {
+                alert("Please select a topic first!");
+                return;
+            }
+            
+            currentQuestions = quizData[currentTopic].questions;
+            currentQuestionIndex = 0;
+            userAnswers = new Array(currentQuestions.length).fill('');
+            userCorrectness = new Array(currentQuestions.length).fill(false);
+            quizCompleted = false;
+            
+            // Hide topic selection, show quiz
+            topicSelectionCard.style.display = 'none';
+            quizContainer.style.display = 'block';
+            resultsContainer.style.display = 'none';
+            
+            // Display first question
+            displayQuestion();
+            
+            console.log("Quiz started successfully with", currentQuestions.length, "questions");
+        }
+
+        // Display the current question
+        function displayQuestion() {
+            const question = currentQuestions[currentQuestionIndex];
+            
+            // Update question number and text
+            questionNumber.textContent = `Question ${currentQuestionIndex + 1} of ${currentQuestions.length}`;
+            questionText.textContent = question.question;
+            
+            // Update progress bar
+            const progressPercentage = ((currentQuestionIndex + 1) / currentQuestions.length) * 100;
+            progressBar.style.width = `${progressPercentage}%`;
+            
+            // Set answer input
+            answerInput.value = userAnswers[currentQuestionIndex];
+            
+            // Hide hint and feedback
+            hintBox.style.display = 'none';
+            answerStatus.style.display = 'none';
+            
+            // Update definition
+            definitionContent.innerHTML = question.definition;
+            
+            // Update navigation buttons
+            prevBtn.disabled = currentQuestionIndex === 0;
+            
+            if (currentQuestionIndex === currentQuestions.length - 1) {
+                nextBtn.style.display = 'none';
+                submitBtn.style.display = 'block';
+            } else {
+                nextBtn.style.display = 'block';
+                submitBtn.style.display = 'none';
+            }
+            
+            // Focus on answer input
+            answerInput.focus();
+            
+            console.log("Displayed question", currentQuestionIndex + 1);
+        }
+
+        // Insert text at cursor position
+        function insertAtCursor(textarea, text) {
+            const start = textarea.selectionStart;
+            const end = textarea.selectionEnd;
+            const value = textarea.value;
+            
+            textarea.value = value.substring(0, start) + text + value.substring(end);
+            textarea.selectionStart = textarea.selectionEnd = start + text.length;
+            textarea.focus();
+        }
+
+        // Toggle hint visibility
+        function toggleHint() {
+            if (hintBox.style.display === 'block') {
+                hintBox.style.display = 'none';
+                showHintBtn.innerHTML = '<i class="fas fa-lightbulb"></i> Show Hint';
+            } else {
+                hintText.textContent = currentQuestions[currentQuestionIndex].hint;
+                hintBox.style.display = 'block';
+                showHintBtn.innerHTML = '<i class="fas fa-eye-slash"></i> Hide Hint';
+            }
+        }
+
+        // Check the current answer
+        function checkAnswer() {
+            const userAnswer = answerInput.value.trim();
+            const correctAnswer = currentQuestions[currentQuestionIndex].answer;
+            
+            // Save user's answer
+            userAnswers[currentQuestionIndex] = userAnswer;
+            
+            // Simple answer comparison
+            const isCorrect = userAnswer === correctAnswer;
+            userCorrectness[currentQuestionIndex] = isCorrect;
+            
+            // Show feedback
+            answerStatus.textContent = isCorrect 
+                ? "✓ Correct! " + currentQuestions[currentQuestionIndex].explanation
+                : "✗ Incorrect. The correct answer is: " + correctAnswer + ". " + currentQuestions[currentQuestionIndex].explanation;
+                
+            answerStatus.className = isCorrect ? "answer-status correct" : "answer-status incorrect";
+            answerStatus.style.display = 'block';
+            
+            console.log("Answer checked:", isCorrect ? "Correct" : "Incorrect");
+        }
+
+        // Go to the next question
+        function goToNextQuestion() {
+            if (currentQuestionIndex < currentQuestions.length - 1) {
+                currentQuestionIndex++;
+                displayQuestion();
+            }
+        }
+
+        // Go to the previous question
+        function goToPreviousQuestion() {
+            if (currentQuestionIndex > 0) {
+                currentQuestionIndex--;
+                displayQuestion();
+            }
+        }
+
+        // Show quiz results
+        function showResults() {
+            quizCompleted = true;
+            
+            // Calculate score
+            const correctCount = userCorrectness.filter(correct => correct).length;
+            const totalQuestions = currentQuestions.length;
+            const scorePercentage = Math.round((correctCount / totalQuestions) * 100);
+            
+            // Update score display
+            scoreCircle.textContent = `${scorePercentage}%`;
+            scoreText.textContent = `You scored ${correctCount} out of ${totalQuestions}`;
+            
+            // Set score message
+            if (scorePercentage >= 80) {
+                scoreMessage.textContent = "Excellent work! You have a strong understanding of this topic.";
+            } else if (scorePercentage >= 60) {
+                scoreMessage.textContent = "Good job! You understand the basics but could use some more practice.";
+            } else {
+                scoreMessage.textContent = "Keep practicing! Review the definitions and try again.";
+            }
+            
+            // Generate result details
+            resultDetails.innerHTML = '';
+            currentQuestions.forEach((question, index) => {
+                const isCorrect = userCorrectness[index];
+                const resultItem = document.createElement('div');
+                resultItem.className = `result-item ${isCorrect ? 'correct' : 'incorrect'}`;
+                
+                resultItem.innerHTML = `
+                    <h4>Question ${index + 1}: ${question.question}</h4>
+                    <p><strong>Your answer:</strong> ${userAnswers[index] || 'Not answered'}</p>
+                    <p><strong>Correct answer:</strong> ${question.answer}</p>
+                    <p><strong>Explanation:</strong> ${question.explanation}</p>
+                `;
+                
+                resultDetails.appendChild(resultItem);
+            });
+            
+            // Show results and hide quiz
+            quizContainer.style.display = 'none';
+            resultsContainer.style.display = 'block';
+            
+            console.log("Quiz completed with score:", scorePercentage + "%");
+        }
+
+        // Restart the quiz
+        function restartQuiz() {
+            // Reset state
+            currentTopic = '';
+            currentQuestions = [];
+            currentQuestionIndex = 0;
+            userAnswers = [];
+            userCorrectness = [];
+            quizCompleted = false;
+            
+            // Show topic selection and hide results
+            topicSelectionCard.style.display = 'block';
+            resultsContainer.style.display = 'none';
+            startQuizBtn.style.display = 'none';
+            
+            // Deselect all topic cards
+            const topicCards = document.querySelectorAll('.topic-card');
+            topicCards.forEach(card => card.classList.remove('selected'));
+            
+            console.log("Quiz restarted");
+        }
+
+        // Handle keyboard shortcuts
+        function handleKeyboardShortcuts(e) {
+            // MathType shortcuts
+            if (e.ctrlKey && e.shiftKey) {
+                switch(e.key) {
+                    case 'O': // Square root
+                        e.preventDefault();
+                        insertAtCursor(answerInput, '√');
+                        break;
+                    case 'S': // Summation
+                        e.preventDefault();
+                        insertAtCursor(answerInput, '∑');
+                        break;
+                    case 'I': // Integral
+                        e.preventDefault();
+                        insertAtCursor(answerInput, '∫');
+                        break;
+                    case 'D': // Partial derivative
+                        e.preventDefault();
+                        insertAtCursor(answerInput, '∂');
+                        break;
+                    case 'Z': // Infinity
+                        e.preventDefault();
+                        insertAtCursor(answerInput, '∞');
+                        break;
+                    case 'A': // Alpha
+                        e.preventDefault();
+                        insertAtCursor(answerInput, 'α');
+                        break;
+                    case 'B': // Beta
+                        e.preventDefault();
+                        insertAtCursor(answerInput, 'β');
+                        break;
+                    case 'G': // Gamma
+                        e.preventDefault();
+                        insertAtCursor(answerInput, 'γ');
+                        break;
+                    case 'P': // Pi
+                        e.preventDefault();
+                        insertAtCursor(answerInput, 'π');
+                        break;
+                }
+            }
+            
+            // Only handle navigation shortcuts when quiz is active
+            if (quizContainer.style.display === 'block') {
+                // Ctrl + Enter to check answer
+                if (e.ctrlKey && e.key === 'Enter') {
+                    e.preventDefault();
+                    checkAnswer();
+                }
+                
+                // Ctrl + ArrowRight for next question
+                if (e.ctrlKey && e.key === 'ArrowRight') {
+                    e.preventDefault();
+                    if (currentQuestionIndex < currentQuestions.length - 1) {
+                        goToNextQuestion();
+                    }
+                }
+                
+                // Ctrl + ArrowLeft for previous question
+                if (e.ctrlKey && e.key === 'ArrowLeft') {
+                    e.preventDefault();
+                    if (currentQuestionIndex > 0) {
+                        goToPreviousQuestion();
+                    }
+                }
+                
+                // Ctrl + H for hint
+                if (e.ctrlKey && e.key === 'h') {
+                    e.preventDefault();
+                    toggleHint();
+                }
+            }
+        }
+
+        // Initialize the application when the page loads
+        document.addEventListener('DOMContentLoaded', init);
+    </script>
+</body>
+</html>
